@@ -1,0 +1,121 @@
+<doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>機率計算</title>
+		<style>
+			body {background-color:white;}
+			#num{width: 5em;}
+			#den{width: 5em;}
+			#per{width: 5em;}
+			#now{width: 7em;}
+		</style>
+	</head>
+	<body onkeydown="kd()">
+		<script language="javascript">
+			function p1(){
+				document.getElementById("now").value = Number(document.getElementById("now").value) + 1;
+				count();
+			}
+			function kd(){
+				if ((navigator.appname == "Netscape") ? event.which : event.keyCode == 32 ){
+				   p1();
+				}
+			}
+			function count(){
+				let type = "";
+				let typeR = document.getElementsByName("type");
+				for(var i = 0; i < typeR.length; i++){
+					if(typeR[i].checked){
+						type = typeR[i].value;
+					}
+				}
+				console.log("type: " + type);
+				let str = "";
+				let num = document.getElementById("num").value == "" ? 1 : Number(document.getElementById("num").value);
+				let den = document.getElementById("den").value == "" ? 2 : Number(document.getElementById("den").value);				
+				let per = document.getElementById("per").value == "" ? 0 : Number(document.getElementById("per").value);	
+				let now = document.getElementById("now").value == "" ? 0 : Number(document.getElementById("now").value);
+				let gcd;
+				switch (type){
+					case "far":
+						if(den <= num){
+							num = den - 1;
+							document.getElementById("num").value = num;
+						}
+						gcd = getGcd(num, den);
+						num /= gcd;
+						den /= gcd;
+						console.log("num: " + num + ", den: " + den + ", now: " + now);
+						document.getElementById("per").value = floor(num / den * 100, 3);
+						str = "每次的機率: " + num + "/" + den + " (" + floor(num / den * 100, 6);
+						str += "%)<br>累積的機率: " + floor(chance(den, num, now), 3) + "%(沒中機率: " + floor(100 - chance(den, num, now), 3) + "%)";
+						str += "<br><br>機率參考: 25%≒" + rechance(den, num, 25) + "次, 50%≒" + rechance(den, num, 50) + "次, 75%≒" + rechance(den, num, 75);
+						str += "次, 90%≒" + rechance(den, num, 90) + "次, 99%≒" + rechance(den, num, 99) + "次, 99.99%≒" + rechance(den, num, 99.99) + "次";
+						break;
+					case "per":
+						if(per == 0){
+							str = "每次的機率: 0%<br>累積的機率: 0%";
+							document.getElementById("num").value = 1;
+							document.getElementById("den").value = 2;
+							console.log("per: 0");
+							break;
+						}
+						if(per > 1){
+							gcd = getGcd(100, Math.floor(per));
+							console.log("per: " + per + ", now: " + now + ", gcd: " + gcd);
+							num = Math.floor(per) / gcd;
+							den = 100 / gcd;
+						}else{
+							console.log("per: " + per + ", now: " + now);
+							num = 1;
+							den = Math.floor((1 / per) *100);
+						}
+						document.getElementById("num").value = num;
+						document.getElementById("den").value = den;	
+						str = "每次的機率: " + per + "% (" + num + "/" + den + ")<br>累積的機率: " + floor(chance(100, per, now), 3) + "%(沒中機率: " + floor(100 - chance(100, per, now), 3) + "%)";
+						str += "<br><br>機率參考: 25%≒" + rechance(100, per, 25) + "次, 50%≒" + rechance(100, per, 50) + "次, 75%≒" + rechance(100, per, 75);
+						str += "次, 90%≒" + rechance(100, per, 90) + "次, 99%≒" + rechance(100, per, 99) + "次, 99.99%≒" + rechance(100, per, 99.99) + "次";
+						break;
+					default:
+						str = "每次的機率: NaN%<br>累積的機率: NaN%";
+						console.log("NaN");
+				}
+				document.getElementById("out").innerHTML = str;
+			}
+			function log(x, y) {
+				return Math.log(y) / Math.log(x);
+			}
+			function chance(den, num, now){
+				return (1 - Math.pow((den - num) / den, now)) * 100;
+			}
+			function rechance(den, num, arr){
+				return Math.floor(log((den - num) / den, 1 - arr / 100)) + 1;
+			}
+			function floor(base, clear){
+				return Math.floor(base * Math.pow(10, clear)) / Math.pow(10, clear);
+			}
+			function getGcd(a, b) {
+				let max = Math.max(a, b);
+				let min = Math.min(a, b);
+				if (max % min == 0 || min == 0) {
+					return min;
+				} else {
+					return getGcd(max % min, min);
+				}
+			}
+		</script>
+		<form>
+			機率:<br>
+			分數:<input type="number" id="num" placeholder="分子" value="1" min="1" max="16323">
+			/<input type="number" id="den" placeholder="分母" value="2" min="2" max="16324"><br>
+			百分比:<input type="number" id="per" placeholder="百分比" step="0.01" value="0" min="0" max="100">%<br>
+			模式:<input type="radio" name="type" value="far" checked>分數模式
+				<input type="radio" name="type" value="per">百分比模式<br>
+			現在次數:<input type="number" id="now" placeholder="現在次數" value="0" min="0">
+		</form>
+		<button type="button" onclick="count()">計算</button>
+		<button type="button" onclick="p1()">+1</button>(空白鍵也是+1)<br><br><br>
+		<div id="out">每次的機率:?%<br>累積的機率:?%</div>
+	</body>
+</html>
