@@ -1,0 +1,32 @@
+<doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Random Chose</title>
+		<style>
+			body {background-color:black;}
+			textarea {resize: none;}
+			div{color:white;}
+		</style>
+	</head>
+	<body align="center">
+		<script language="javascript">//拜託讓我贏 隨機之神 (*´-🙏-`*)
+			function random(min, max, dec = 0){//隨機函式 min=最小值 max=最大值 dec=小數點後的位數(預設為0)
+				let usedec = Math.pow(10, dec);
+				let maxc = Math.floor(max * usedec);
+				let minc = min < max ? Math.floor(min * usedec) : 0;
+				return (Math.floor(Math.random() * (maxc - minc + 1)) + minc) / usedec;
+			}
+			function chose(){
+				let allchose = document.getElementById("input").value;
+				let sp = allchose.split(",");
+				let str = (sp.length <= 1) ? "輸入太少" : sp[random(0, (sp.length - 1))];
+				document.getElementById('output').innerHTML = str;//輸出至畫面
+			}
+		</script>
+		<div>輸入想隨機的項目以","為分割符<br></div>
+		<textarea id="input" wrap="virtual" cols="30" rows="5"></textarea><br>
+		<button type="button" onclick="chose()">隨機選擇</button><br>
+		<div id="output"></div>
+	</body>
+</html>
