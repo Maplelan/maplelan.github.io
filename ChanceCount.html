@@ -50,7 +50,7 @@
 						console.log("num: " + num + ", den: " + den + ", now: " + now);
 						document.getElementById("per").value = floor(num / den * 100, 3);
 						str = "每次的機率: " + num + "/" + den + " (" + floor(num / den * 100, 6);
-						str += "%)<br>累積的機率: " + floor(chance(den, num, now), 3) + "%(沒中機率: " + floor(100 - chance(den, num, now), 3) + "%)";
+						str += "%)<br>累積的機率: " + floor(chance(den, num, now), 3) + "%(沒中機率: " + (100 - floor(chance(den, num, now), 3)) + "%)";
 						str += "<br><br>機率參考: 25%≒" + rechance(den, num, 25) + "次, 50%≒" + rechance(den, num, 50) + "次, 75%≒" + rechance(den, num, 75);
 						str += "次, 90%≒" + rechance(den, num, 90) + "次, 99%≒" + rechance(den, num, 99) + "次, 99.99%≒" + rechance(den, num, 99.99) + "次";
 						break;
