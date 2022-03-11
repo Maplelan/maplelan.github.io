@@ -106,6 +106,7 @@
 				}
 			}
 		</script>
+		<div>
 		<form>
 			機率:<br>
 			分數:<input type="number" id="num" placeholder="分子" value="1" min="1" max="16323">
@@ -115,6 +116,7 @@
 				<input type="radio" name="type" value="per">百分比模式<br>
 			現在次數:<input type="number" id="now" placeholder="現在次數" value="0" min="0">
 		</form>
+		</div>
 		<button type="button" onclick="count()">計算</button>
 		<button type="button" onclick="p1()">+1</button>(空白鍵也是+1)<br><br><br>
 		<div id="out">每次的機率:?%<br>累積的機率:?%</div>
