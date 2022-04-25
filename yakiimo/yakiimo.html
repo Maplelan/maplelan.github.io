@@ -7,22 +7,26 @@
         <style>
 			body {background-color:black;}
 			body {color:white;}
+			body {font-size: 40px;}
 		</style>
         <script language="javascript">
 			const soundcount = 6;
 			let click = 0;
 			let audioarr = [];
 			for(let i = 0;i < soundcount;i++){
-				console.log(i);
 				let audio = document.createElement("audio");
 				audio.src = "sweetpotato-0" + (i+1) + ".mp3";
 				audioarr.push(audio);
 			}
 			function playsound(){
 				let random = Math.floor(Math.random()*(soundcount));
-				console.log(random);
         		audioarr[random].play();
+				document.getElementById("imo").style.width = "431px";
 				document.getElementById("out").innerHTML = "你點擊了" + ++click + "次地瓜</br>";
+				//setTimeout(function(){},100);
+			}
+			function mouseUp(){
+				document.getElementById("imo").style.width = "451px";
 			}
 		</script>
     </head>
@@ -30,6 +34,6 @@
         <div id="out">
 			你點擊了0次地瓜</br>
 		</div>
-		<img src="yakiimo.png" onclick="playsound()">
+		<img id="imo" src="yakiimo.png" onmousedown="playsound()" onmouseup="mouseUp()" style="width: 451px">
     </body>
 </html>
