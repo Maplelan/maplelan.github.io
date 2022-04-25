@@ -1,0 +1,34 @@
+<doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>地瓜模擬器</title>
+		<link rel="icon" href="yakiimo.ico" type="image/x-icon">
+		<style>
+			body {background-color:black;}
+		</style>
+	</head>
+	<body align="center">
+		<script language="javascript">
+			function playsound(){
+				console.log("play");
+				const audio = document.createElement("audio");
+				switch(Math.floor(Math.random()*3)){
+					case 0:
+        				audio.src = "sweetpotato-01.mp3";
+					break;
+					case 1:
+						audio.src = "sweetpotato-02.mp3";
+					break;
+					case 2:
+						audio.src = "sweetpotato-03.mp3";
+					break;
+				}
+        		audio.play();
+			}
+		</script>
+		<div id="out">
+			<img src="yakiimo.png" onclick="playsound()">
+		</div>
+	</body>
+</html>
