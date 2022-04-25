@@ -6,8 +6,10 @@
         <link rel="icon" href="yakiimo.ico" type="image/x-icon">
         <style>
 			body {background-color:black;}
+			body {color:white;}
 		</style>
         <script language="javascript">
+			let click = 0;
 			function playsound(){
 				console.log("play");
 				const audio01 = document.createElement("audio");
@@ -27,12 +29,14 @@
 						audio03.play();
 					break;
 				}
+				document.getElementById("out").innerHTML = "你點擊了" + ++click + "次地瓜</br>";
 			}
 		</script>
     </head>
     <body align="center">
         <div id="out">
-			<img src="yakiimo.png" onclick="playsound()">
+			你點擊了0次地瓜</br>
 		</div>
+		<img src="yakiimo.png" onclick="playsound()">
     </body>
 </html>
