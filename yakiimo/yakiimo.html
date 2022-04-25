@@ -9,25 +9,19 @@
 			body {color:white;}
 		</style>
         <script language="javascript">
+			const soundcount = 6;
 			let click = 0;
+			let audioarr = [];
+			for(let i = 0;i < soundcount;i++){
+				console.log(i);
+				let audio = document.createElement("audio");
+				audio.src = "sweetpotato-0" + (i+1) + ".mp3";
+				audioarr.push(audio);
+			}
 			function playsound(){
-				const audio01 = document.createElement("audio");
-				const audio02 = document.createElement("audio");
-				const audio03 = document.createElement("audio");
-				audio01.src = "sweetpotato-01.mp3";
-				audio02.src = "sweetpotato-02.mp3";
-				audio03.src = "sweetpotato-03.mp3";
-				switch(Math.floor(Math.random()*3)){
-					case 0:
-        					audio01.play();
-					break;
-					case 1:
-						audio02.play();
-					break;
-					case 2:
-						audio03.play();
-					break;
-				}
+				let random = Math.floor(Math.random()*(soundcount));
+				console.log(random);
+        		audioarr[random].play();
 				document.getElementById("out").innerHTML = "你點擊了" + ++click + "次地瓜</br>";
 			}
 		</script>
