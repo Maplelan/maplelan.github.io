@@ -13,6 +13,11 @@
         <script language="javascript">
 			const soundcount = 6;
 			let click = 0;
+			if (typeof(Storage) !== "undefined") {
+				if (localStorage.clickcount) {
+  					click = Number(localStorage.clickcount);
+				}
+			}
 			let audioarr = [];
 			for(let i = 0;i < soundcount;i++){
 				let audio = document.createElement("audio");
@@ -24,17 +29,32 @@
         		audioarr[random].play();
 				document.getElementById("imo").style.width = "431px";
 				document.getElementById("out").innerHTML = "你點擊了" + ++click + "次地瓜</br>";
-				//setTimeout(function(){},100);
+				if (typeof(Storage) !== "undefined") {
+					localStorage.clickcount = click;
+				}
 			}
 			function mouseUp(){
 				document.getElementById("imo").style.width = "451px";
 			}
+			function onload(){
+				document.getElementById("out").innerHTML = "你點擊了" + click + "次地瓜</br>";
+			}
+			function clearclick(){
+				console.log("clear");
+				if (typeof(Storage) !== "undefined") {
+					localStorage.clickcount = 0;
+				}
+				click = 0;
+				document.getElementById("out").innerHTML = "你點擊了" + click + "次地瓜</br>";
+			}
 		</script>
     </head>
-    <body align="center">
+    <body align="center" onload="onload()">
         <div id="out">
 			你點擊了0次地瓜</br>
 		</div>
 		<img id="imo" src="yakiimo.png" onmousedown="playsound()" onmouseup="mouseUp()" style="width: 451px">
-    </body>
+		</br>
+		<button type="button" onclick="clearclick()">我想重種地瓜</button>
+	</body>
 </html>
