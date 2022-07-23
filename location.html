@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>Click the button to get your coordinates.</p>
+
+<button onclick="getLocation()">Try It</button>
+
+<p id="demo"></p>
+<p id="timer"></p>
+
+<script>
+var totalSeconds = 0;
+var x = document.getElementById("demo");
+var timerVariable = setInterval(countUpTimer, 1000);
+
+function getLocation() {
+  if (navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(showPosition);
+    totalSeconds = 11;
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function showPosition(position) {
+  x.innerHTML = "Latitude: " + position.coords.latitude + 
+  "<br>Longitude: " + position.coords.longitude;
+}
+
+function countUpTimer() {
+	if(totalSeconds<=0){
+    	navigator.geolocation.getCurrentPosition(showPosition);
+        totalSeconds = 11;
+    }
+      --totalSeconds;
+      var hour = Math.floor(totalSeconds / 3600);
+      var minute = Math.floor((totalSeconds - hour * 3600) / 60);
+      var seconds = totalSeconds - (hour * 3600 + minute * 60);
+      document.getElementById("timer").innerHTML = "下次更新: " + seconds + "秒後";
+}
+</script>
+
+</body>
+</html>
