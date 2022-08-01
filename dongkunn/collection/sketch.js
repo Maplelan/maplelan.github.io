@@ -6,8 +6,9 @@ const sketch = (p) => {
   let nowPosion_lat,nowPosion_lon;
   let my_lat,my_lon;
   let totalSeconds;
+  navigator.geolocation.getCurrentPosition(showPosition);
 
-  p.preload = () => {//frameCount
+  p.preload = () => {
     navigator.geolocation.getCurrentPosition(showPosition);
   };
 
@@ -95,6 +96,7 @@ const sketch = (p) => {
     my_lon = position.coords.longitude;
     //my_lat = 25.229747;
     //my_lon = 121.550172;
+    console.log(my_lat);
   }
 
   function countTimer() {
