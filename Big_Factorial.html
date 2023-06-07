@@ -1,0 +1,198 @@
+<doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>可極大數階乘</title>
+		<style>
+			body {background-color:black;}
+			textarea {resize: none;}
+			div{color:white;}
+			.parent{
+				background-color:rgb(32, 32, 32);
+				border: 2px solid rgb(32, 32, 32);
+				border-radius: 7px;
+				padding: 7px;
+				margin:5px;
+				display: inline-block;
+				min-height: 5px;
+				min-width: 5px;
+				max-width: 90%;
+				word-wrap:break-word;
+			}
+		</style>
+		<script type="text/javascript">
+			/* 
+			* 大整数乘法
+			* 功能：大整数乘法精确运算，同时解决浮点数误差问题
+			* 问题：超过 Number.MAX_SAGE_INTEGER 的数不能准确表示，同时运算结果也不准确
+			* 原理：通过字符串表示大数，并且从字符串末尾开始把每个字符转成数值进行运算，然后再处理进位和借位，最后结果也是用字符串表示
+			* 说明：
+			*      支持正负整数；
+			*      不支持科学计数法表示的字符串，如 1.2e+10；
+			*      进行运算的字符串假设数值格式尽量标准
+			*/
+
+			// 大整数相乘
+			function largeNumMulti(num1, num2) {
+			// 从末尾开始计算乘积
+			const num1Arr = num1.split('').reverse()
+			const num2Arr = num2.split('').reverse()
+			const result = []
+			// 填充0，为后面的累加作准备
+			result.length = num1Arr.length + num2Arr.length - 1
+			result.fill(0)
+
+			// result[i + j] 上不断累加对应位的乘积
+			num1Arr.forEach((a, i) => {
+				num2Arr.forEach((b, j) => {
+				result[i + j] += parseInt(a) * parseInt(b)
+				})
+			})
+
+			// 处理 result 进位
+			const lastCarry = result.reduce((carry, v, k) => {
+				result[k] += carry
+				if (result[k] >= 10) {
+				const _carry = Math.floor(result[k] / 10)
+				result[k] %= 10
+				return _carry
+				}
+				return 0
+			}, 0)
+			lastCarry && result.push(lastCarry)
+
+			return result.reverse().join('')
+			}
+
+			// 处理异常数值和符号
+			function largeNumCalculation(num1, num2, ...others) {
+			if (others.length > 0) {
+				return largeNumCalculation(largeNumCalculation(num1, num2), others[0], ...others.slice(1))
+			}
+
+			if (
+				Number.isNaN(parseFloat(num1)) ||
+				Number.isNaN(parseFloat(num2)) ||
+				!/^[0-9-]*$/.test(num1) ||
+				!/^[0-9-]*$/.test(num2)
+			) {
+				throw new Error('Not a valid number')
+			}
+
+			const num1Trimmed = num1.trim().replace(/^0+/g, '')
+			const num2Trimmed = num2.trim().replace(/^0+/g, '')
+
+			const isNum1Positive = !num1[0].startsWith('-')
+			const isNum2Positive = !num2[0].startsWith('-')
+
+			// 处理符号
+			if (num1Trimmed && num2Trimmed) {
+				if (isNum1Positive && isNum2Positive) {
+				return largeNumMulti(num1Trimmed, num2Trimmed)
+				} else if (!isNum1Positive && !isNum2Positive) {
+				return largeNumMulti(num1Trimmed.slice(1), num2Trimmed.slice(1))
+				} else {
+				return (
+					'-' +
+					largeNumMulti(
+					isNum1Positive ? num1Trimmed : num1Trimmed.slice(1),
+					isNum2Positive ? num2Trimmed : num2Trimmed.slice(1),
+					)
+				)
+				}
+			}
+			return num1Trimmed + num2Trimmed
+			}
+
+			const a = '-3455'
+			const b = '-2200'
+			console.log(+a * +b)
+			console.log(largeNumCalculation(a, b))
+
+			function IsNum(s)//判斷是否為數字
+			{
+			if(s!=null && s!=undefined){
+				let r,re;
+				re = /\d*/i; //\d表示數字,*表示匹配多回個數字
+				r = s.toString().match(re);
+				return (r==s && s!='') ? true : false;
+			}
+			return false;
+			}
+			function sectostring(intime){
+				let usetime_str = "";
+				let usetime = Math.floor(intime/1000);
+				if(intime <= 0){
+					usetime_str = "0秒"
+				}else{
+					const Hour = Math.floor(usetime/3600);
+					const Min = Math.floor((usetime%3600)/60);
+					const Sec = Math.floor(usetime%60);
+					const Minsec = intime%1000;
+					if(Hour > 0){
+						usetime_str += `${Hour}小時`;
+					}
+					if(Min > 0 || (Hour > 0 && Sec > 0)){
+						if(Hour > 0){
+							usetime_str += `${Min.toString().padStart(2,"0")}分鐘`;
+						}else{
+							usetime_str += `${Min}分鐘`;
+						}
+					}
+					if(Sec > 0){
+						if(Min > 0){
+							usetime_str += `${Sec.toString().padStart(2,"0")}秒`;
+						}else{
+							usetime_str += `${Sec}秒`;
+						}
+					}
+					if(Minsec > 0){
+						if(Sec > 0){
+							usetime_str += `${Minsec.toString().padStart(3,"0")}`;
+						}else{
+							usetime_str += `${Minsec}毫秒`;
+						}
+					}
+				}
+				
+				return usetime_str;
+			}
+			function count(){
+				let input = document.getElementById("input").value;
+				if(IsNum(input)){
+					let tar = parseInt(input,10);
+					let ans = "1";
+					if(tar>1){
+						let start = Date.now();
+						for(let i=2;i<=tar;i++){
+							setTimeout(function(){
+								let or = ans;
+								ans = largeNumMulti(ans, i.toString());
+								//console.log(`${or}*${i.toString()}=${ans}`)
+								if(i==tar){
+									document.getElementById('dis').innerText = `使用了${sectostring(Date.now()-start)} 共有${ans.length}位數\n計算${i}階乘的答案是：`;
+								}else{
+									document.getElementById('dis').innerText = `已使用${sectostring(Date.now()-start)} 共有${ans.length}位數\n計算${i}階乘的答案是：`;
+								}
+								document.getElementById('output').innerText = ans;
+							})
+						}
+					}else{
+						document.getElementById('dis').innerText = `計算${tar}階乘的答案是：`;
+						document.getElementById('output').innerText = ans;
+					}
+				}else{
+					document.getElementById('dis').innerText = `請輸入正整數`;
+					document.getElementById('output').innerText = "";
+				}
+			}
+		</script>
+	</head>
+	<body align="center">
+		<div>輸入想要階乘的目標數字<br></div>
+		<textarea id="input" wrap="virtual" cols="20" rows="1"></textarea><br>
+		<button id="RC" type="button" onclick="count()">計算</button><br>
+		<div id="dis"></div>
+		<div class="parent" id="output"></div>
+	</body>
+</html>
