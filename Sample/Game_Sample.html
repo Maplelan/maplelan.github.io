@@ -1,0 +1,119 @@
+<doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>隨機選擇</title>
+		<style>
+			body {background-color:black;}
+			table{color:white;}
+			table,td,th {border: 1px solid white;}
+			div{color:white;}
+		</style>
+	</head>
+	<body align="center">
+		<script language="javascript">
+			function makeArray(length,value){//製造一個長度為length內容都是value的陣列
+				let arr = Array();
+				for(let i=0;i<length;i++){
+					arr.push(value);
+				}
+				return arr;
+			}
+			function randomChose(arr,lv){//從data的裡面做權重的隨機選取
+				let itemArray = Array();
+				arr.forEach(item => {
+					itemArray = itemArray.concat(makeArray(Math.max(0,item.weight+(lv-1)*item.add),item.id));
+				});
+				return itemArray[Math.floor(Math.random()*itemArray.length)];
+			}
+			//以上為通用
+			//以下為HTML用
+			function getData(){//取值
+				let data = Array();
+				for(let i=0;i<4;i++){
+					let item = {'id':i};
+					item.name = document.getElementById("Name_"+i).value;
+					item.weight = parseInt(document.getElementById("Weight_"+i).value);
+					item.add = parseInt(document.getElementById("Add_"+i).value);
+					data.push(item);
+				}
+				return data;
+			}
+			function countChose(arr,lv){//既算機率資訊
+				let str = `資訊:<br>技能等級為 ${lv}<br><br>`;
+				let all = 0;
+				arr.forEach(item => {
+					all += item.weight+(lv-1)*item.add;
+				});
+				str += `陣列中一共會有 ${all} 個物品<br>`;
+				arr.forEach(item => {
+					const point = Math.max(0,item.weight+(lv-1)*item.add);
+					str += `<br>有 ${((point/all)*100).toFixed(3)}% 的機率獲得 ${item.name}(${point}個)`;
+				});
+				return str;
+			}
+			//按鈕
+			function result(){
+				const lv = parseInt(document.getElementById("LV").value);
+				const data = getData();
+				const get = data[randomChose(data,lv)];
+
+				let say = get.id==0?'你什麼都沒有獲得':`你獲得到了 ${get.name}`;
+				document.getElementById('output').innerHTML = say + '<br><br>' + countChose(data,lv);
+
+			}
+		</script>
+		<br>
+		<center>
+			<table>
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Name</th>
+						<th>權重</th>
+						<th>等級加乘</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>0</td>
+						<td>空氣<input id="Name_0" type="hidden" value="空氣"/></td>
+						<td><input id="Weight_0" type="number" min="0" max="9999" value="50"/></td>
+						<td><input id="Add_0" type="number" min="-999" max="999" value="-1"/></td>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td><input id="Name_1" type="text" size=5 value="藥草"/></td>
+						<td><input id="Weight_1" type="number" min="0" max="9999" value="150"/></td>
+						<td><input id="Add_1" type="number" min="-999" max="999" value="2"/></td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td><input id="Name_2" type="text" size=5 value="莓果"/></td>
+						<td><input id="Weight_2" type="number" min="0" max="9999" value="333"/></td>
+						<td><input id="Add_2" type="number" min="-999" max="999" value="5"/></td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td><input id="Name_3" type="text" size=5 value="土"/></td>
+						<td><input id="Weight_3" type="number" min="0" max="9999" value="20"/></td>
+						<td><input id="Add_3" type="number" min="-999" max="999" value="0"/></td>
+					</tr>
+				</tbody>
+			</table>
+			<br>
+			<table>
+				<tbody>
+					<tr>
+						<td>技能等級</td>
+						<td><input id="LV" type="number" min="1" max="99" value="1"/></td>
+					</tr>
+				</tbody>
+			</table>
+		</center>
+		<br>
+		<button id="bt" type="button" onclick="result()">產生結果</button><br>
+		<br>
+		<div id="output"></div>
+	</body>
+</html>
