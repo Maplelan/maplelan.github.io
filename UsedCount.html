@@ -26,7 +26,7 @@
 					const onlyUsed = award - timeGet;
 					const times = onlyUsed / 50000;
 
-					str += "約" + Math.floor(times) + "次";
+					str += "約" + Math.max(Math.floor(times),0) + "次";
 				}
 				
 				document.getElementById("out").innerHTML = str;
