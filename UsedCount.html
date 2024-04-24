@@ -1,0 +1,49 @@
+<doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>蔚藍檔案支援借出次數計算</title>
+		<style>
+			body {background-color:black;}
+			body {color:white;}
+			#num{width: 5em;}
+			#den{width: 5em;}
+			#per{width: 5em;}
+			#now{width: 7em;}
+		</style>
+	</head>
+	<body align="center">
+		<script language="javascript">
+			function count(){
+				let str = "被借出次數：";
+				const award = document.getElementById("award").value == "" ? set("award",0) : Number(document.getElementById("award").value);
+				const time = document.getElementById("time").value == "" ? set("time",0) : Number(document.getElementById("time").value);
+
+				if(award == 0 || time == 0){
+					str += "0次";
+				}else{
+					const timeGet = time*60*20;
+					const onlyUsed = award - timeGet;
+					const times = onlyUsed / 50000;
+
+					str += "約" + Math.floor(times) + "次";
+				}
+				
+				document.getElementById("out").innerHTML = str;
+			}
+			function set(id,value){
+				document.getElementById(id).value = value;
+				return value;
+			}
+		</script>
+		<div>
+		<form>
+			<h3>蔚藍檔案支援借出次數計算</h3>
+			編輯時間：<input type="number" id="time" placeholder="編輯時間" min="0">小時<br>
+			獲得獎勵：<input type="number" id="award" placeholder="獲得獎勵" min="0">信用<br>
+		</form>
+		</div>
+		<button type="button" onclick="count()">計算</button>
+		<div id="out">被借出次數：</div>
+	</body>
+</html>
