@@ -15,7 +15,7 @@
 	<body align="center">
 		<script language="javascript">
 			function count(){
-				let str = "被借出次數：";
+				let str = "借出次數：";
 				const award = document.getElementById("award").value == "" ? set("award",0) : Number(document.getElementById("award").value);
 				const time = document.getElementById("time").value == "" ? set("time",0) : Number(document.getElementById("time").value);
 
@@ -44,6 +44,6 @@
 		</form>
 		</div>
 		<button type="button" onclick="count()">計算</button>
-		<div id="out">被借出次數：</div>
+		<div id="out">借出次數：</div>
 	</body>
 </html>
